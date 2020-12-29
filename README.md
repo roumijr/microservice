@@ -1,6 +1,6 @@
 # microservice
 
-learning by creating a project 
+learn by creating a project 
 
 
 1 day : 

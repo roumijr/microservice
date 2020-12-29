@@ -9,11 +9,11 @@ import (
 
 // Product defines a structure for an api product
 type Product struct {
-	ID			int		`json:"id"`
+	ID		int	`json:"id"`
 	Name		string	`json:"name"`
-	Description string	`json:"description"`
+	Description 	string	`json:"description"`
 	Price 		float32	`json:"price"`
-	SKU			string	`json:"sku"`
+	SKU		string	`json:"sku"`
 	CreatedOn	string	`json:"-"`
 	UpdatedOn	string	`json:"-"`
 	DeletedOn	string	`json:"-"`
@@ -35,25 +35,25 @@ func GetProducts() Products {
 
 var productList = []*Product {
 	&Product{
-	ID:			 1,			
-	Name:		 "latte",
-	Description: "Milk coffe",
-	Price: 		 2.45,
-	SKU:		 "abcd1",	
-	CreatedOn:	 time.Now().UTC().String(),
-	UpdatedOn:	 time.Now().UTC().String(),
-	DeletedOn:	 time.Now().UTC().String(),
+	ID:		1,			
+	Name:		"latte",
+	Description:    "Milk coffe",
+	Price: 		2.45,
+	SKU:		"abcd1",	
+	CreatedOn:	time.Now().UTC().String(),
+	UpdatedOn:	time.Now().UTC().String(),
+	DeletedOn:	time.Now().UTC().String(),
 
 	},
 	&Product{
-	ID:			 2,
-	Name:		 "Espresso",
-	Description: "Strong coffe without milk",
-	Price: 		 1.99,
-	SKU:		 "abcd2",
-	CreatedOn:	 time.Now().UTC().String(),
-	UpdatedOn:	 time.Now().UTC().String(),
-	DeletedOn:	 time.Now().UTC().String(),
+	ID:		2,
+	Name:		"Espresso",
+	Description: 	"Strong coffe without milk",
+	Price: 		1.99,
+	SKU:		"abcd2",
+	CreatedOn:	time.Now().UTC().String(),
+	UpdatedOn:	time.Now().UTC().String(),
+	DeletedOn:	time.Now().UTC().String(),
 
 	},
 } 

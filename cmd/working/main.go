@@ -32,9 +32,9 @@ func main() {
 
 	// create a new server
 	s := &http.Server{
-		Addr: *BindAddress, 				// config 
-		Handler: sm,						// set the default handler
-		ErrorLog: l,						// set the logger for the server
+		Addr: *BindAddress, 			// config 
+		Handler: sm,				// set the default handler
+		ErrorLog: l,				// set the logger for the server
 		WriteTimeout: 10 * time.Second,		// max time to write response to the client
 		ReadTimeout: 5 * time.Second,		// max time to read request from the client
 		IdleTimeout: 120 * time.Second,		// max time for connection using TCP Keep-Alive

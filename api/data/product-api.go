@@ -104,25 +104,25 @@ func GetNextID() int {
 
 var productList = []*Product {
 	&Product{
-	ID:			 1,			
-	Name:		 "latte",
-	Description: "Milk coffe",
-	Price: 		 2.45,
-	SKU:		 "abcd1",	
-	CreatedOn:	 time.Now().UTC().String(),
-	UpdatedOn:	 time.Now().UTC().String(),
-	DeletedOn:	 time.Now().UTC().String(),
+	ID:		1,			
+	Name:		"latte",
+	Description:    "Milk coffe",
+	Price: 		2.45,
+	SKU:		"abcd1",	
+	CreatedOn:	time.Now().UTC().String(),
+	UpdatedOn:	time.Now().UTC().String(),
+	DeletedOn:	time.Now().UTC().String(),
 
 	},
 	&Product{
-	ID:			 2,
-	Name:		 "Espresso",
-	Description: "Strong coffe without milk",
-	Price: 		 1.99,
-	SKU:		 "abcd2",
-	CreatedOn:	 time.Now().UTC().String(),
-	UpdatedOn:	 time.Now().UTC().String(),
-	DeletedOn:	 time.Now().UTC().String(),
+	ID:		2,
+	Name:		"Espresso",
+	Description: 	"Strong coffe without milk",
+	Price: 		1.99,
+	SKU:		"abcd2",
+	CreatedOn:	time.Now().UTC().String(),
+	UpdatedOn:	time.Now().UTC().String(),
+	DeletedOn:	time.Now().UTC().String(),
 
 	},
 } 

@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"strconv"
-	"regexp"
 	"net/http"
 	"log"
+	"context"
 
 
 	"github.com/gorilla/mux"
@@ -40,29 +40,24 @@ func(p *Products) getProducts(rw http.ResponseWriter, r *http.Request) {
 
 func(p *Products) addProduct(rw http.ResponseWriter, r *http.Request) {
 	p.l.Println("Handle POST Product")
-	
-	prod := &data.Product {}
 
-	err := prod.FromJSON(r.Body)
-	if err != nil {
-		http.Error(rw, "Unable to unmarshal JSON", http.StatusBadRequest)
-	}
-
-	data.AddProduct(prod)
+	prod := r.Context().Value(KeyProduct{}).(data.Product)
+	data.AddProduct(&prod)
 }
 
-func(p *Products) updateProducts(rw http.ResponseWriter, r *http.Request) {
+func(p *Products) UpdateProducts(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		 http.Error(rw, "Unable to convert ID", http.StatusBadRequest)
 		 return
 	}
-	p.l.Println("Handle UPDATE Product", id)
+	p.l.Println("Handle PUT Product", id)
+	prod := r.Context().Value(KeyProduct{}).(data.Product)
 	
 	
 
-	err = data.UpdateProduct(id, prod)
+	err = data.UpdateProduct(id, &prod)
 	if err == data.ErrProductNotFound {
 		http.Error(rw, "Product not found", http.StatusNotFound)
 		return
@@ -78,18 +73,18 @@ func(p *Products) updateProducts(rw http.ResponseWriter, r *http.Request) {
 type KeyProduct struct{}
 
 func(p *Products) MiddlewareValidateProduct(next http.Handler) http.Handler {
-	return http.HandlerFunc(rw http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		prod := &data.Product{}
-
-		err = prod.FromJSON(r.Body)
+		
+		err := prod.FromJSON(r.Body)
 		if err != nil {
 		http.Error(rw, "Unable to unmarshal JSON", http.StatusBadRequest)
 		return
 		}
 
-		ctx := r.Context().WithValue(KeyProduct{}, prod)
+		ctx := context.WithValue(r.Context(), KeyProduct{}, prod)
 		req := r.WithContext(ctx)
 
 		next.ServeHTTP(rw, req)
-	}
+	})
 }

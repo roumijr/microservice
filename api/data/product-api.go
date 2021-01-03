@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"encoding/json"
 	"io"
 	"time"
@@ -19,6 +20,12 @@ type Product struct {
 	DeletedOn	string	`json:"-"`
 }
 
+//FromJSON convert the data
+func(p *Product) FromJSON(r io.Reader) error {
+	e := json.NewDecoder(r)
+	return e.Decode(p)
+}
+
 // Products is a receiver
 type Products []*Product 
 
@@ -32,6 +39,45 @@ func(p *Products) ToJSON(w io.Writer) error {
 func GetProducts() Products {
 	return productList
 }
+
+// AddProduct is adding product to the database
+func AddProduct(p *Product) {
+	p.ID = GetNextID()
+	productList = append(productList, p)
+}
+
+// UpdateProduct is updating the list of products
+func UpdateProduct(id int, p *Product) error {
+	_, pos, err := findProduct(id)
+	if err != nil {
+		return err
+	}
+
+	p.ID = id
+	productList[pos] = p
+
+	return nil
+}
+
+// ErrProductNotFound is custom error for the productList
+var ErrProductNotFound = fmt.Errorf("Product not found")
+
+func findProduct(id int) (*Product, int, error) {
+	for i, p := range productList {
+		if p.ID == id {
+			return p, i, nil
+		}
+	}
+
+	return nil, -1, ErrProductNotFound
+}
+
+//GetNextID serching for the next product ID
+func GetNextID() int {
+	lp := productList[len(productList) - 1]
+	return lp.ID + 1
+}
+
 
 var productList = []*Product {
 	&Product{

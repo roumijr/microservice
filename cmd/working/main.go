@@ -36,11 +36,11 @@ func main() {
 
 	putRouter := sm.Methods(http.MethodPut).Subrouter()
 	putRouter.HandleFunc("/(id:[0-9]+)", ph.UpdateProducts)
-	putRouter.Use(ph MiddlewareValidateProduct)
+	putRouter.Use(ph.MiddlewareValidateProduct)
 
 	postRouter := sm.Methods(http.MethodPost).Subrouter()
 	postRouter.HandleFunc("/", ph.AddProduct)
-	postRouter.Use(ph MiddlewareValidateProduct)
+	postRouter.Use(ph.MiddlewareValidateProduct)
 
 
 	// create a new server

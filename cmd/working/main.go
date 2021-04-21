@@ -1,27 +1,26 @@
 package main
 
 import (
-	"os/signal"
 	"context"
-	"time"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"time"
 
-
+	"github.com/go-openapi/runtime/middleware"
 	"github.com/gorilla/mux"
-
+	"github.com/nicholasjackson/env"
 
 	"working/cmd/working/handlers"
 )
 
-// BindAddress represents config for server connection 
+// BindAddress represents config for server connection
 var BindAddress = env.String("BIND_ADDRESS", false, ":9090", "Bind address for the server")
 
 func main() {
 
 	env.Parse()
-
 
 	l := log.New(os.Stdout, "product-api", log.LstdFlags)
 
@@ -35,22 +34,31 @@ func main() {
 	getRouter.HandleFunc("/", ph.GetProducts)
 
 	putRouter := sm.Methods(http.MethodPut).Subrouter()
-	putRouter.HandleFunc("/(id:[0-9]+)", ph.UpdateProducts)
+	putRouter.HandleFunc("/", ph.UpdateProducts)
 	putRouter.Use(ph.MiddlewareValidateProduct)
 
 	postRouter := sm.Methods(http.MethodPost).Subrouter()
 	postRouter.HandleFunc("/", ph.AddProduct)
 	postRouter.Use(ph.MiddlewareValidateProduct)
 
+	deleteRouter := sm.Methods(http.MethodDelete).Subrouter()
+	deleteRouter.HandleFunc("/(id:[0-9]+)", ph.DeleteProduct)
+
+	opts := middleware.RedocOpts{SpecURL: "/swagger.yaml"}
+	sh := middleware.Redoc(opts, nil)
+
+	getRouter.Handle("/docs", sh)
+
+	getRouter.Handle("swagger.yaml/", http.FileServer(http.Dir("./")))
 
 	// create a new server
 	s := &http.Server{
-		Addr: *BindAddress, 			// config 
-		Handler: sm,				// set the default handler
-		ErrorLog: l,				// set the logger for the server
-		WriteTimeout: 10 * time.Second,		// max time to write response to the client
-		ReadTimeout: 5 * time.Second,		// max time to read request from the client
-		IdleTimeout: 120 * time.Second,		// max time for connection using TCP Keep-Alive
+		Addr:         *BindAddress,      // config
+		Handler:      sm,                // set the default handler
+		ErrorLog:     l,                 // set the logger for the server
+		WriteTimeout: 10 * time.Second,  // max time to write response to the client
+		ReadTimeout:  5 * time.Second,   // max time to read request from the client
+		IdleTimeout:  120 * time.Second, // max time for connection using TCP Keep-Alive
 	}
 
 	// start the server
@@ -74,4 +82,4 @@ func main() {
 
 	tc, _ := context.WithTimeout(context.Background(), 30*time.Second)
 	s.Shutdown(tc)
-} 
+}

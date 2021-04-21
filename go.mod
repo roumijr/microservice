@@ -3,19 +3,14 @@ module working
 go 1.15
 
 require (
-	github.com/go-openapi/validate v0.20.0 // indirect
-	github.com/go-playground/validator/v10 v10.4.1
-	github.com/go-swagger/go-swagger v0.25.0 // indirect
-	github.com/gorilla/handlers v1.5.1 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/go-openapi/runtime v0.19.28
+	github.com/go-playground/validator/v10 v10.5.0
 	github.com/gorilla/mux v1.8.0
-	github.com/kr/pretty v0.2.1 // indirect
-	github.com/magiconair/properties v1.8.4 // indirect
-	github.com/pelletier/go-toml v1.8.1 // indirect
-	github.com/spf13/afero v1.5.1 // indirect
-	github.com/spf13/viper v1.7.1 // indirect
-	golang.org/x/mod v0.4.0 // indirect
-	golang.org/x/net v0.0.0-20201224014010-6772e930b67b // indirect
+	github.com/kr/text v0.2.0 // indirect
+	github.com/nicholasjackson/env v0.1.0
+	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
+	golang.org/x/crypto v0.0.0-20200709230013-948cd5f35899 // indirect
 	golang.org/x/sys v0.0.0-20201231184435-2d18734c6014 // indirect
-	golang.org/x/tools v0.0.0-20210102185154-773b96fafca2 // indirect
-	gopkg.in/ini.v1 v1.62.0 // indirect
+	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 )

@@ -1,40 +1,44 @@
 package data
 
 import (
-	"fmt"
 	"encoding/json"
-	"regexp"
+	"fmt"
 	"io"
+	"regexp"
 	"time"
 
 	"github.com/go-playground/validator/v10"
 )
- 
 
 // Product defines a structure for an api product
+// swagger: model
 type Product struct {
-	ID			int		`json:"id"`
-	Name		string	`json:"name" validate:"required"`
-	Description string	`json:"description"`
-	Price 		float32	`json:"price" validate:"gt=0"`
-	SKU			string	`json:"sku" validate:"required,sku"`
-	CreatedOn	string	`json:"-"`
-	UpdatedOn	string	`json:"-"`
-	DeletedOn	string	`json:"-"`
+	// the id for this user
+	//
+	// required: true
+	// min: 1
+	ID          int     `json:"id"`
+	Name        string  `json:"name" validate:"required"`
+	Description string  `json:"description"`
+	Price       float32 `json:"price" validate:"gt=0"`
+	SKU         string  `json:"sku" validate:"required,sku"`
+	CreatedOn   string  `json:"-"`
+	UpdatedOn   string  `json:"-"`
+	DeletedOn   string  `json:"-"`
 }
 
 //FromJSON convert the data
-func(p *Product) FromJSON(r io.Reader) error {
+func (p *Product) FromJSON(r io.Reader) error {
 	e := json.NewDecoder(r)
 	return e.Decode(p)
 }
 
 //
-func(p *Product) Validate() error {
+func (p *Product) Validate() error {
 	validate := validator.New()
 	validate.RegisterValidation("sku", validateSKU)
 	return validate.Struct(p)
-	
+
 }
 
 func validateSKU(fl validator.FieldLevel) bool {
@@ -50,10 +54,10 @@ func validateSKU(fl validator.FieldLevel) bool {
 }
 
 // Products is a receiver
-type Products []*Product 
+type Products []*Product
 
 // ToJSON method converts data to json format
-func(p *Products) ToJSON(w io.Writer) error {
+func (p *Products) ToJSON(w io.Writer) error {
 	e := json.NewEncoder(w)
 	return e.Encode(p)
 }
@@ -67,6 +71,29 @@ func GetProducts() Products {
 func AddProduct(p *Product) {
 	p.ID = GetNextID()
 	productList = append(productList, p)
+}
+
+// DeleteProduct deletes a product
+func DeleteProduct(id int) error {
+	i := findIndexByProductID(id)
+	if i == -1 {
+		return ErrProductNotFound
+	}
+
+	productList = append(productList[1:], productList[i+1])
+
+	return nil
+}
+
+//
+func findIndexByProductID(id int) int {
+	for i, p := range productList {
+		if p.ID == id {
+			return i
+		}
+	}
+
+	return -1
 }
 
 // UpdateProduct is updating the list of products
@@ -97,35 +124,29 @@ func findProduct(id int) (*Product, int, error) {
 
 //GetNextID serching for the next product ID
 func GetNextID() int {
-	lp := productList[len(productList) - 1]
+	lp := productList[len(productList)-1]
 	return lp.ID + 1
 }
 
-
-var productList = []*Product {
+var productList = []*Product{
 	&Product{
-	ID:		1,			
-	Name:		"latte",
-	Description:    "Milk coffe",
-	Price: 		2.45,
-	SKU:		"abcd1",	
-	CreatedOn:	time.Now().UTC().String(),
-	UpdatedOn:	time.Now().UTC().String(),
-	DeletedOn:	time.Now().UTC().String(),
-
+		ID:          1,
+		Name:        "latte",
+		Description: "Milk coffe",
+		Price:       2.45,
+		SKU:         "abcd1",
+		CreatedOn:   time.Now().UTC().String(),
+		UpdatedOn:   time.Now().UTC().String(),
+		DeletedOn:   time.Now().UTC().String(),
 	},
 	&Product{
-	ID:		2,
-	Name:		"Espresso",
-	Description: 	"Strong coffe without milk",
-	Price: 		1.99,
-	SKU:		"abcd2",
-	CreatedOn:	time.Now().UTC().String(),
-	UpdatedOn:	time.Now().UTC().String(),
-	DeletedOn:	time.Now().UTC().String(),
-
+		ID:          2,
+		Name:        "Espresso",
+		Description: "Strong coffe without milk",
+		Price:       1.99,
+		SKU:         "abcd2",
+		CreatedOn:   time.Now().UTC().String(),
+		UpdatedOn:   time.Now().UTC().String(),
+		DeletedOn:   time.Now().UTC().String(),
 	},
-} 
-
-
-
+}

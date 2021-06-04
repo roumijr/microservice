@@ -8,12 +8,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// swagger:route DELETE /products{id} products deleteProduct
+// swagger:route DELETE /products/{id} products deleteProduct
 // Returns list of products
 // responses:
-// 200": ProductsResponse
+// 201: No Content
 
-// GetProduct returns the product from the data store
+// DeleteProduct deletes a product from the database
 func (p *Products) DeleteProduct(rw http.ResponseWriter, r *http.Request) {
 	// this will converts becouse of the router
 	vars := mux.Vars(r)
